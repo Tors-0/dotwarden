@@ -33,39 +33,33 @@ public class PowerItem extends Item {
 		super(settings);
 	}
 
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		if (!world.isClient()) {
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (!world.isClient()) {
             user.getItemCooldownManager().set(this,20);
+            ItemStack stack = user.getStackInHand(hand);
             if (user.getInventory().contains(new ItemStack(Items.SCULK))) {
-                if (user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") == 0) {
-                    user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).putInt("power",
-                            user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") +
-                                    user.getInventory().remove(SCULK_ITEM, ptsUntilNextLevel(user.getStackInHand(hand)), user.getInventory()));
-                } else {
-                    user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).putInt("power",
-                            user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") +
-                                    user.getInventory().remove(SCULK_ITEM, ptsUntilNextLevel(user.getStackInHand(hand)) -
-                                                    user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power"),
-                                            user.getInventory()));
-                }
-                while (user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") >= ptsUntilNextLevel(user.getStackInHand(hand))) {
-                    user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).putInt("power",
-                            user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") -
-                                    ptsUntilNextLevel(user.getStackInHand(hand)));
-                    ((PlayerExtensions) user).dotwarden$setPowerLevel(((PlayerExtensions) user).dotwarden$getPowerLevel()+1);
+                ((PlayerExtensions)user).dotwarden$addPower(
+                        user.getInventory().remove(SCULK_ITEM, ptsUntilNextLevel(stack), user.getInventory())
+                );
+
+                while (((PlayerExtensions)user).dotwarden$getPower() >= ptsUntilNextLevel(stack)) {
+                    ((PlayerExtensions) user).dotwarden$addPower( - ptsUntilNextLevel(stack));
+                    ((PlayerExtensions) user).dotwarden$addPowerLevel(1);
+                    stack.getOrCreateSubNbt(DOTWarden.ID).putInt("powerlevels", ((PlayerExtensions) user).dotwarden$getPowerLevel());
+                    stack.getOrCreateSubNbt(DOTWarden.ID).putInt("power", ((PlayerExtensions) user).dotwarden$getPower());
                 }
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeInt(((PlayerExtensions)user).dotwarden$getPowerLevel());
                 buf.writeInt(((PlayerExtensions)user).dotwarden$getPower());
                 ServerPlayNetworking.send((ServerPlayerEntity)user, DOTWNetworking.POWERLEVEL_PACKET_ID, buf);
-                return TypedActionResult.success(user.getStackInHand(hand),true);
+                return TypedActionResult.success(stack,true);
             } else {
-                while (user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") >= ptsUntilNextLevel(user.getStackInHand(hand))) {
-                    user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).putInt("power",
-                            user.getStackInHand(hand).getOrCreateSubNbt(DOTWarden.ID).getInt("power") -
-                                    ptsUntilNextLevel(user.getStackInHand(hand)));
-                    ((PlayerExtensions) user).dotwarden$setPowerLevel(((PlayerExtensions) user).dotwarden$getPowerLevel()+1);
+                while (((PlayerExtensions)user).dotwarden$getPower() >= ptsUntilNextLevel(stack)) {
+                    ((PlayerExtensions) user).dotwarden$addPower( - ptsUntilNextLevel(stack));
+                    ((PlayerExtensions) user).dotwarden$addPowerLevel(1);
+                    stack.getOrCreateSubNbt(DOTWarden.ID).putInt("powerlevels", ((PlayerExtensions) user).dotwarden$getPowerLevel());
+                    stack.getOrCreateSubNbt(DOTWarden.ID).putInt("power", ((PlayerExtensions) user).dotwarden$getPower());
                 }
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeInt(((PlayerExtensions)user).dotwarden$getPowerLevel());
@@ -73,9 +67,9 @@ public class PowerItem extends Item {
                 ServerPlayNetworking.send((ServerPlayerEntity)user, DOTWNetworking.POWERLEVEL_PACKET_ID, buf);
                 return TypedActionResult.pass(user.getStackInHand(hand));
             }
-		}
-		return super.use(world, user, hand);
-	}
+        }
+        return super.use(world, user, hand);
+    }
 	public static int ptsUntilNextLevel(ItemStack stack) {
 		int level = stack.getOrCreateSubNbt(DOTWarden.ID).getInt("powerlevels");
 		if (level >= 30) {

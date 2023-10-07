@@ -28,7 +28,7 @@
   "overrides": [
     {
       "predicate": {
-        "tooting": 1
+        "tooting": 0.00001
       },
       "model": "dotwarden:item/tooting_seismic_horn"
     }

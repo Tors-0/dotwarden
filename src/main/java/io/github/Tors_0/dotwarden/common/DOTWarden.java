@@ -1,10 +1,12 @@
 package io.github.Tors_0.dotwarden.common;
 
 import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
-import io.github.Tors_0.dotwarden.common.recipe.SeismicHornRecipe;
+import io.github.Tors_0.dotwarden.common.item.EchoChamberItem;
 import io.github.Tors_0.dotwarden.common.recipe.HarmonicStaffRecipe;
+import io.github.Tors_0.dotwarden.common.recipe.SeismicHornRecipe;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
@@ -33,8 +35,18 @@ public class DOTWarden implements ModInitializer {
     public void onInitialize(ModContainer mod) {
         LOGGER.info("Now initializing {} version {}", mod.metadata().name(), mod.metadata().version());
 
+        // init all items
         ModItems.init();
 
+        // register predicate providers for custom item states
+        ModelPredicateProviderRegistry.register(ModItems.ECHO_CHAMBER, new Identifier("filled"), (stack, world, entity, seed) -> EchoChamberItem.getAmountFilled(stack));
+        ModelPredicateProviderRegistry.register(
+                ModItems.SEISMIC_HORN,
+                new Identifier("tooting"),
+                (stack, world, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == stack ? 1.0F : 0.0F
+        );
+
+        // modify existing events
         ServerPlayerEntityCopyCallback.EVENT.register((copy, original, wasDeath) -> {
             if (copy instanceof PlayerExtensions playerNew && original instanceof PlayerExtensions playerOld) {
                 playerNew.dotwarden$setPowerLevel(playerOld.dotwarden$getPowerLevel());
@@ -48,5 +60,7 @@ public class DOTWarden implements ModInitializer {
                 tableBuilder.pool(poolBuilder);
             }
         });
+
+        LOGGER.info("Finished initializing {}", mod.metadata().name());
     }
 }

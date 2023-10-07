@@ -142,6 +142,9 @@ public class EchoChamberItem extends BundleItem {
             return 0;
         }
     }
+    public static float getAmountFilled(ItemStack stack) {
+        return (float)getBundleOccupancy(stack) / 64.0F;
+    }
     private static Optional<NbtCompound> canMergeStack(ItemStack stack, NbtList items) {
         return stack.isOf(Items.BUNDLE)
                 ? Optional.empty()
@@ -176,7 +179,6 @@ public class EchoChamberItem extends BundleItem {
                     player.dropItem(itemStack, true);
                 }
             }
-
             stack.removeSubNbt("Items");
             return true;
         }
