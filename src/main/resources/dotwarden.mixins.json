@@ -6,7 +6,8 @@
   "mixins": [
     "common.PlayerInventoryMixin",
     "common.PlayerManagerMixin",
-    "common.PlayerMixin"
+    "common.PlayerMixin",
+    "common.WardenEntityMixin"
   ],
   "client": [
     "client.ItemRendererMixin"
