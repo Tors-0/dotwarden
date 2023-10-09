@@ -7,8 +7,7 @@
     "common.PlayerInventoryMixin",
     "common.PlayerManagerMixin",
     "common.PlayerMixin",
-    "common.WardenAngerManagerMixin",
-    "common.WardenEntityMixin"
+    "common.WardenAngerManagerMixin"
   ],
   "client": [
     "client.ItemRendererMixin"
