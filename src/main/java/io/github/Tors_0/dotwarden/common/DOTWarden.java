@@ -39,13 +39,15 @@ public class DOTWarden implements ModInitializer {
         ModItems.init();
 
         // register predicate providers for custom item states
-        ModelPredicateProviderRegistry.register(ModItems.ECHO_CHAMBER, new Identifier("filled"), (stack, world, entity, seed) -> EchoChamberItem.getAmountFilled(stack));
+        ModelPredicateProviderRegistry.register(
+                ModItems.ECHO_CHAMBER,
+                new Identifier("filled"),
+                (stack, world, entity, seed) -> EchoChamberItem.getAmountFilled(stack));
         ModelPredicateProviderRegistry.register(
                 ModItems.SEISMIC_HORN,
                 new Identifier("tooting"),
                 (stack, world, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == stack ? 1.0F : 0.0F
         );
-
         // modify existing events
         ServerPlayerEntityCopyCallback.EVENT.register((copy, original, wasDeath) -> {
             if (copy instanceof PlayerExtensions playerNew && original instanceof PlayerExtensions playerOld) {
@@ -53,6 +55,7 @@ public class DOTWarden implements ModInitializer {
                 playerNew.dotwarden$setSacrifice(playerOld.dotwarden$hasSacrificed());
             }
         });
+
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             if (source.isBuiltin() && WARDEN_LOOT_TABLE_ID.equals(id)) {
                 LootPool.Builder poolBuilder = LootPool.builder()

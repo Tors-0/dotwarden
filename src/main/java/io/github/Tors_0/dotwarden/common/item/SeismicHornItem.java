@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -31,7 +32,7 @@ import java.util.function.Predicate;
 
 public class SeismicHornItem extends Item {
     private static final Predicate<Entity> CAN_BE_HIT_ENTITY = entity -> (entity instanceof LivingEntity && !(entity instanceof WardenEntity));
-    private static final float MAX_RANGE = 3f;
+    private static final float MAX_RANGE = 4.25f;
     private static final int POWER_LEVEL_COST = 10;
     private static final float BOOM_DAMAGE = 4.0F;
 
@@ -64,14 +65,24 @@ public class SeismicHornItem extends Item {
                     double d = 0.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                     double e = 2.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                     livingEntity.addVelocity(vec3d3.getX() * e, vec3d3.getY() * d + 0.35, vec3d3.getZ() * e);
-                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 400, 1));
+                    livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 400, 0));
                 });
                 user.playSound(SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK, SoundCategory.PLAYERS, 1f, 1f);
-                Vec3d vec3d = user.getPos();
+                Vec3d vec3d = user.getPos().add(user.getRotationVec(1.0f));
                 ((ServerWorld) world).spawnParticles(ParticleTypes.SONIC_BOOM, vec3d.x, vec3d.y + 1.6f, vec3d.z, 1, 0, 0, 0, 0);
-                return TypedActionResult.success(user.getStackInHand(hand), true);
+                return TypedActionResult.consume(user.getStackInHand(hand));
             }
         }
         return super.use(world, user, hand);
+    }
+
+    @Override
+    public int getMaxUseTime(ItemStack stack) {
+        return 2;
+    }
+
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.TOOT_HORN;
     }
 }

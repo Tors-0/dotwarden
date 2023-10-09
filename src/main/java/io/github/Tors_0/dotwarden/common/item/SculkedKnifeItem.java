@@ -22,6 +22,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
@@ -36,6 +37,10 @@ public class SculkedKnifeItem extends Item {
         super(settings);
     }
     @Override
+    public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+        return !miner.isCreative();
+    }
+    @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker instanceof PlayerEntity player) {
             if (((PlayerExtensions) player).dotwarden$getPowerLevel() > 0) {
@@ -47,9 +52,9 @@ public class SculkedKnifeItem extends Item {
                 target.damage(DamageSource.player(player),0f);
             }
             if (target.isDead()
-                    && !(target instanceof WardenEntity)
-                    && !target.isBaby()
                     && player.getInventory().contains(new ItemStack(ModItems.POWER_OF_THE_DISCIPLE))
+                    && !target.isBaby()
+                    && !(target instanceof WardenEntity)
             ) {
                 PlayerExtensions playerE = (PlayerExtensions) player;
                 if (target instanceof PlayerEntity) {

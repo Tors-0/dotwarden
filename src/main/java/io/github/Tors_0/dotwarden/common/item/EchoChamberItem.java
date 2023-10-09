@@ -39,7 +39,9 @@ public class EchoChamberItem extends BundleItem {
         } else {
             ItemStack itemStack = otherSlot.getStack();
             if (itemStack.isEmpty()) {
-                this.playRemoveOneSound(player);
+                if (!thisStack.getOrCreateNbt().getList("Items", NbtElement.COMPOUND_TYPE).isEmpty()) {
+                    this.playRemoveOneSound(player);
+                }
                 removeFirstStack(thisStack).ifPresent(removedStack -> addToBundle(thisStack, otherSlot.insertStack(removedStack)));
             } else if (itemStack.getItem().canBeNested() && itemStack.isOf(ModItems.CAPTURED_SOUL)) {
                 int i = (MAX_STORAGE - getBundleOccupancy(thisStack)) / getItemOccupancy(itemStack);
@@ -48,7 +50,6 @@ public class EchoChamberItem extends BundleItem {
                     this.playInsertSound(player);
                 }
             }
-
             return true;
         }
     }
