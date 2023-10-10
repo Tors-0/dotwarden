@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.stream.IntStream;
 
 @Mixin(AngerManager.class)
@@ -22,24 +23,22 @@ public class WardenAngerManagerMixin {
     protected ArrayList<Entity> suspects;
 
     @Shadow
-    private int highestAnger;
+    int highestAnger;
 
     @Shadow
     @Final
     protected Object2IntMap<Entity> angerBySuspect;
 
-    @Inject(method = "sortAndUpdateHighestAnger", at = @At(value = "TAIL"))
+    @Inject(method = "sortAndUpdateHighestAnger", at = @At(value = "HEAD"))
     public void sortAndUpdateHighestAnger(CallbackInfo ci) {
-        for (int i = 0; i < this.suspects.size(); i++) {
-            Entity entity = this.suspects.get(i);
-            if (entity instanceof PlayerEntity player) {
+        Iterator<Entity> objectIterator = suspects.iterator();
+        while (objectIterator.hasNext()) {
+            Entity entity = objectIterator.next();
+            if ((entity instanceof PlayerEntity player)) {
                 boolean isSneaky = IntStream.rangeClosed(0, 3).mapToObj(player.getInventory()::getArmorStack)
                         .allMatch(itemStack -> itemStack.getItem() instanceof DiscipleArmorItem);
-                if (isSneaky) this.suspects.remove(entity);
+                if (isSneaky) objectIterator.remove();
             }
-        }
-        if (this.suspects.size() == 1) {
-            highestAnger = angerBySuspect.getInt(this.suspects.get(0));
         }
     }
 }
