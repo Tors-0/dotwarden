@@ -35,8 +35,8 @@ public class DOTWarden implements ModInitializer {
     public void onInitialize(ModContainer mod) {
         LOGGER.info("Now initializing {} version {}", mod.metadata().name(), mod.metadata().version());
 
-        // init all items
-        ModItems.init();
+        // register all items
+        ModItems.register();
 
         // register predicate providers for custom item states
         ModelPredicateProviderRegistry.register(

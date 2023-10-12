@@ -42,12 +42,22 @@ public interface ModItems {
     Item DISCIPLE_BOOTS = createItem("disciple_boots", new DiscipleArmorItem(EquipmentSlot.FEET,
         new QuiltItemSettings().group(ItemGroup.COMBAT)));
 
+    /**
+     * Creates a new item of type T using the constructor from T
+     * @param name String name of the item (used in JSON)
+     * @param item _Item class that extends net.minecraft.Item
+     * @return A newly created _Item object
+     * @param <T> _Item class that extends net.minecraft.Item
+     */
 	private static <T extends Item> T createItem(String name, T item) {
 		ITEMS.put(item, new Identifier(DOTWarden.ID, name));
 		return item;
 	}
 
-	static void init() {
+    /**
+     * Registers all items into the Minecraft Item Registry
+     */
+	static void register() {
 		ITEMS.keySet().forEach(item -> {
 			Registry.register(Registry.ITEM, ITEMS.get(item), item);
 		});
