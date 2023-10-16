@@ -13,6 +13,11 @@
   "item.dotwarden.harmonic_staff": "Harmonic Staff",
   "item.dotwarden.seismic_horn": "Seismic Horn",
 
+  "item.dotwarden.disciple_boots": "Disciple's Hood",
+  "item.dotwarden.disciple_leggings": "Disciple's Cloak",
+  "item.dotwarden.disciple_chestplate": "Disciple's Pants",
+  "item.dotwarden.disciple_helmet": "Disciple's Boots",
+
   "death.attack.heartstab": "%1$s cut their own heart out",
   "death.attack.seismic_shout": "%1$s was obliterated by a seismic shout",
   "death.attack.seismic_shout.player": "%1$s was obliterated by a seismic shout from %2$s",

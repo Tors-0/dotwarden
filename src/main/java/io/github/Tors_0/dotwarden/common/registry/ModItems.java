@@ -33,11 +33,11 @@ public interface ModItems {
     Item SEISMIC_HORN = createItem("seismic_horn", new SeismicHornItem(new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1).rarity(Rarity.RARE)));
 //  Item SCULK_BELL = createItem("sculk_bell", new Item(new QuiltItemSettings().group(ItemGroup.COMBAT)));
     // Armor Items
-    Item DISCIPLE_HOOD = createItem("disciple_hood", new DiscipleArmorItem(EquipmentSlot.HEAD,
+    Item DISCIPLE_HOOD = createItem("disciple_helmet", new DiscipleArmorItem(EquipmentSlot.HEAD,
         new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
-    Item DISCIPLE_CLOAK = createItem("disciple_cloak", new DiscipleArmorItem(EquipmentSlot.CHEST,
+    Item DISCIPLE_CLOAK = createItem("disciple_chestplate", new DiscipleArmorItem(EquipmentSlot.CHEST,
         new QuiltItemSettings().group(ItemGroup.COMBAT)));
-    Item DISCIPLE_GREAVES = createItem("disciple_greaves", new DiscipleArmorItem(EquipmentSlot.LEGS,
+    Item DISCIPLE_GREAVES = createItem("disciple_leggings", new DiscipleArmorItem(EquipmentSlot.LEGS,
         new QuiltItemSettings().group(ItemGroup.COMBAT).maxCount(1)));
     Item DISCIPLE_BOOTS = createItem("disciple_boots", new DiscipleArmorItem(EquipmentSlot.FEET,
         new QuiltItemSettings().group(ItemGroup.COMBAT)));
