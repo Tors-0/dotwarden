@@ -6,7 +6,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 
 public class DiscipleArmorItem extends ArmorItem {
-    public DiscipleArmorItem(EquipmentSlot slot, Settings settings) {
+    public DiscipleArmorItem(ArmorSlot slot, Settings settings) {
         super(ModArmorMaterials.DISCIPLE, slot, settings);
     }
 

@@ -78,13 +78,13 @@ public class EchoChamberItem extends BundleItem {
         }
     }
     private void playRemoveOneSound(Entity entity) {
-        entity.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+        entity.playSound(SoundEvents.ENTITY_WARDEN_DEATH, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
     }
     private void playDropContentsSound(Entity entity) {
-        entity.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * -0.4F);
+        entity.playSound(SoundEvents.ENTITY_WARDEN_DEATH, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * -0.4F);
     }
     private void playInsertSound(Entity entity) {
-        entity.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
+        entity.playSound(SoundEvents.ENTITY_WARDEN_SONIC_CHARGE, 0.8F, 0.8F + entity.getWorld().getRandom().nextFloat() * 0.4F);
     }
     private static Optional<ItemStack> removeFirstStack(ItemStack stack) {
         NbtCompound nbtCompound = stack.getOrCreateNbt();

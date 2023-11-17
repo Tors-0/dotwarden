@@ -4,6 +4,7 @@ import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
 import io.github.Tors_0.dotwarden.common.item.EchoChamberItem;
 import io.github.Tors_0.dotwarden.common.recipe.HarmonicStaffRecipe;
 import io.github.Tors_0.dotwarden.common.recipe.SeismicHornRecipe;
+import io.github.Tors_0.dotwarden.common.registry.ModItemGroup;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
@@ -15,7 +16,7 @@ import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.entity_events.api.ServerPlayerEntityCopyCallback;
+import org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,9 @@ public class DOTWarden implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger(ID);
     public static final SpecialRecipeSerializer<HarmonicStaffRecipe> HARMONIC_STAFF_RECIPE = RecipeSerializer.register(
-            "dotwarden:harmonic_staff", new SpecialRecipeSerializer<>(HarmonicStaffRecipe::new));
+            "dotwarden:harmonic_staff", new SpecialRecipeSerializer<>(new HarmonicStaffRecipe(HarmonicStaffRecipe.HARMONIC_STAFF_RECIPE_ID)));
     public static final SpecialRecipeSerializer<SeismicHornRecipe> SEISMIC_HORN_RECIPE = RecipeSerializer.register(
-            "dotwarden:seismic_horn", new SpecialRecipeSerializer<>(SeismicHornRecipe::new));
+            "dotwarden:seismic_horn", new SpecialRecipeSerializer<>(new SeismicHornRecipe(SeismicHornRecipe.SEISMIC_HORN_RECIPE_ID)));
     private static final Identifier WARDEN_LOOT_TABLE_ID = EntityType.WARDEN.getLootTableId();
 
     @Override
@@ -37,6 +38,8 @@ public class DOTWarden implements ModInitializer {
 
         // register all items
         ModItems.register();
+        ModItemGroup.init();
+
 
         // register predicate providers for custom item states
         ModelPredicateProviderRegistry.register(

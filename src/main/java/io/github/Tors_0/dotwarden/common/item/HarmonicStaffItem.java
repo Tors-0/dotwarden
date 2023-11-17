@@ -86,7 +86,7 @@ public class HarmonicStaffItem extends Item {
                     ((ServerWorld) world).spawnParticles(ParticleTypes.SONIC_BOOM, vec3d4.x, vec3d4.y, vec3d4.z, 1, 0.0, 0.0, 0.0, 0.0);
                 }
                 player.playSound(SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 3.0F, 1.0F);
-                livingEntity.damage(new EntityDamageSource("sonic_boom", player).setUsesMagic(), BOOM_DAMAGE);
+                livingEntity.damage(world.getDamageSources().sonicBoom(player), BOOM_DAMAGE);
                 double d = 0.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                 double e = 2.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                 livingEntity.addVelocity(vec3d3.getX() * e, vec3d3.getY() * d, vec3d3.getZ() * e);

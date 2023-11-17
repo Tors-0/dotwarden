@@ -6,6 +6,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
@@ -43,18 +44,18 @@ public class ScytheItemRenderer implements BuiltinItemRendererRegistry.DynamicIt
             applyProfiler.push("listener");
             final MinecraftClient client = MinecraftClient.getInstance();
             this.itemRenderer = client.getItemRenderer();
-            this.inventoryScytheModel = client.getBakedModelManager().getModel(new ModelIdentifier(Objects.requireNonNull(Identifier.method_43902(scytheId.getNamespace(), scytheId.getPath() + "_gui")), "inventory"));
-            this.worldScytheModel = client.getBakedModelManager().getModel(new ModelIdentifier(Objects.requireNonNull(Identifier.method_43902(scytheId.getNamespace(), scytheId.getPath() + "_handheld")), "inventory"));
+            this.inventoryScytheModel = client.getBakedModelManager().getModel(new ModelIdentifier(new Identifier(scytheId.getNamespace(), scytheId.getPath() + "_gui"), "inventory"));
+            this.worldScytheModel = client.getBakedModelManager().getModel(new ModelIdentifier(new Identifier(scytheId.getNamespace(), scytheId.getPath() + "_handheld"), "inventory"));
             applyProfiler.pop();
             applyProfiler.endTick();
         }, applyExecutor);
     }
 
     @Override
-    public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(ItemStack stack, ModelTransformationMode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrices.pop();
         matrices.push();
-        if (mode != ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND && mode != ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND && mode != ModelTransformation.Mode.THIRD_PERSON_LEFT_HAND && mode != ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND) {
+        if (mode != ModelTransformationMode.FIRST_PERSON_LEFT_HAND && mode != ModelTransformationMode.FIRST_PERSON_RIGHT_HAND && mode != ModelTransformationMode.THIRD_PERSON_LEFT_HAND && mode != ModelTransformationMode.THIRD_PERSON_RIGHT_HAND) {
             itemRenderer.renderItem(stack, mode, false, matrices, vertexConsumers, light, overlay, this.inventoryScytheModel);
         } else {
             boolean leftHanded;

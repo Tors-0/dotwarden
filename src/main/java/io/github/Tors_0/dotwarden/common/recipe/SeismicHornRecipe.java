@@ -3,22 +3,23 @@ package io.github.Tors_0.dotwarden.common.recipe;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.*;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class SeismicHornRecipe extends SpecialCraftingRecipe {
+public class SeismicHornRecipe extends SpecialCraftingRecipe implements SpecialRecipeSerializer.Factory<SeismicHornRecipe> {
+    public static final Identifier SEISMIC_HORN_RECIPE_ID = new Identifier(DOTWarden.ID, "seismic_horn");
     private static final Ingredient ECHO_CHAMBER = Ingredient.ofItems(ModItems.ECHO_CHAMBER);
     private static final Ingredient GOAT_HORN = Ingredient.ofItems(Items.GOAT_HORN);
     private static final Ingredient SCULK_SHRIEKER = Ingredient.ofItems(Items.SCULK_SHRIEKER);
 
     public SeismicHornRecipe(Identifier id) {
-        super(id);
+        super(id, CraftingCategory.EQUIPMENT);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         for (int i = 3; i < 6; ++i) {
             ItemStack itemStack = inventory.getStack(i);
             if (!itemStack.isEmpty()) {
@@ -41,7 +42,7 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack craft(CraftingInventory inventory) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         for (int i = 0; i < 3; ++i) {
             ItemStack echoStack = inventory.getStack(i);
             if (
@@ -59,7 +60,7 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     }
 
     @Override
-    public ItemStack getOutput() {
+    public ItemStack getResult(DynamicRegistryManager registryManager) {
         return new ItemStack(ModItems.SEISMIC_HORN);
     }
 
@@ -71,5 +72,10 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
         return DOTWarden.SEISMIC_HORN_RECIPE;
+    }
+
+    @Override
+    public SeismicHornRecipe create(Identifier identifier, CraftingCategory craftingCategory) {
+        return null;
     }
 }

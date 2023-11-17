@@ -1,37 +1,46 @@
 package io.github.Tors_0.dotwarden.common.registry;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ArmorMaterials;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Lazy;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.Util;
 
+import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    DISCIPLE("disciple", 35, new int[]{3, 6, 8, 3}, 10, SoundEvents.BLOCK_WOOL_PLACE, 2.0F, 0.0F, () -> {
+    DISCIPLE("netherite", 35, (EnumMap)Util.make(new EnumMap(ArmorItem.ArmorSlot.class), (map) -> {
+        map.put(ArmorItem.ArmorSlot.BOOTS, 3);
+        map.put(ArmorItem.ArmorSlot.LEGGINGS, 6);
+        map.put(ArmorItem.ArmorSlot.CHESTPLATE, 8);
+        map.put(ArmorItem.ArmorSlot.HELMET, 3);
+    }), 10, SoundEvents.BLOCK_WOOL_PLACE, 2.0F, 0.0F, () -> {
         return Ingredient.ofItems(new ItemConvertible[]{Items.BLACK_WOOL});
-    })
-    ;
+    });
 
-    private static final int[] BASE_DURABILITY = new int[]{13, 15, 16, 11};
+    public static final StringIdentifiable.EnumCodec<ArmorMaterials> CODEC = StringIdentifiable.createCodec(ArmorMaterials::values);
+    private static final EnumMap<ArmorItem.ArmorSlot, Integer> BASE_DURABILITY_VALUES = (EnumMap)Util.make(new EnumMap(ArmorItem.ArmorSlot.class), (map) -> {
+        map.put(ArmorItem.ArmorSlot.BOOTS, 13);
+        map.put(ArmorItem.ArmorSlot.LEGGINGS, 15);
+        map.put(ArmorItem.ArmorSlot.CHESTPLATE, 16);
+        map.put(ArmorItem.ArmorSlot.HELMET, 11);
+    });
     private final String name;
     private final int durabilityMultiplier;
-    private final int[] protectionAmounts;
+    private final EnumMap<ArmorItem.ArmorSlot, Integer> slotProtections;
     private final int enchantability;
     private final SoundEvent equipSound;
     private final float toughness;
     private final float knockbackResistance;
     private final Lazy<Ingredient> repairIngredientSupplier;
 
-    private ModArmorMaterials(String name, int durabilityMultiplier, int[] protectionAmounts, int enchantability, SoundEvent equipSound, float toughness, float knockbackResistance, Supplier repairIngredientSupplier) {
+    private ModArmorMaterials(String name, int durabilityMultiplier, EnumMap slotProtections, int enchantability, SoundEvent equipSound, float toughness, float knockbackResistance, Supplier repairIngredientSupplier) {
         this.name = name;
         this.durabilityMultiplier = durabilityMultiplier;
-        this.protectionAmounts = protectionAmounts;
+        this.slotProtections = slotProtections;
         this.enchantability = enchantability;
         this.equipSound = equipSound;
         this.toughness = toughness;
@@ -39,12 +48,12 @@ public enum ModArmorMaterials implements ArmorMaterial {
         this.repairIngredientSupplier = new Lazy(repairIngredientSupplier);
     }
 
-    public int getDurability(EquipmentSlot slot) {
-        return BASE_DURABILITY[slot.getEntitySlotId()] * this.durabilityMultiplier;
+    public int getDurability(ArmorItem.ArmorSlot slot) {
+        return (Integer)BASE_DURABILITY_VALUES.get(slot) * this.durabilityMultiplier;
     }
 
-    public int getProtectionAmount(EquipmentSlot slot) {
-        return this.protectionAmounts[slot.getEntitySlotId()];
+    public int getProtection(ArmorItem.ArmorSlot slot) {
+        return (Integer)this.slotProtections.get(slot);
     }
 
     public int getEnchantability() {
@@ -69,5 +78,9 @@ public enum ModArmorMaterials implements ArmorMaterial {
 
     public float getKnockbackResistance() {
         return this.knockbackResistance;
+    }
+
+    public String asString() {
+        return this.name;
     }
 }

@@ -5,7 +5,6 @@ import io.github.Tors_0.dotwarden.common.networking.DOTWNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.warden.WardenEntity;
@@ -61,7 +60,7 @@ public class SeismicHornItem extends Item {
                     LivingEntity livingEntity = (LivingEntity) entity;
                     Vec3d vec3d2 = livingEntity.getEyePos().subtract(startPoint);
                     Vec3d vec3d3 = vec3d2.normalize();
-                    livingEntity.damage(new EntityDamageSource("seismic_shout", user).setUsesMagic(), BOOM_DAMAGE);
+                    livingEntity.damage(world.getDamageSources().sonicBoom(user), BOOM_DAMAGE);
                     double d = 0.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                     double e = 2.5 * (1.0 - livingEntity.getAttributeValue(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE));
                     livingEntity.addVelocity(vec3d3.getX() * e, vec3d3.getY() * d + 0.35, vec3d3.getZ() * e);

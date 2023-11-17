@@ -10,7 +10,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.warden.WardenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -44,12 +43,12 @@ public class SculkedKnifeItem extends Item {
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker instanceof PlayerEntity player) {
             if (((PlayerExtensions) player).dotwarden$getPowerLevel() > 0) {
-                target.damage(DamageSource.player(player),Math.min(((PlayerExtensions) player).dotwarden$getPowerLevel() / 5f + 1, 15f));
+                target.damage(attacker.getWorld().getDamageSources().playerAttack(player),Math.min(((PlayerExtensions) player).dotwarden$getPowerLevel() / 5f + 1, 15f));
             } else {
                 stack.damage(1, attacker, (e) -> {
                     e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
                 });
-                target.damage(DamageSource.player(player),0f);
+                target.damage(attacker.getWorld().getDamageSources().playerAttack(player),0f);
             }
             if (target.isDead()
                     && player.getInventory().contains(new ItemStack(ModItems.POWER_OF_THE_DISCIPLE))
@@ -88,7 +87,7 @@ public class SculkedKnifeItem extends Item {
                 ItemStack itm = new ItemStack(ModItems.CORRUPTED_HEART);
                 itm.getOrCreateSubNbt(DOTWarden.ID).putString("owner",user.getName().getString());
                 user.getInventory().insertStack(itm);
-                user.damage(new DamageSource("heartstab").setBypassesArmor(),100f);
+                user.damage(world.getDamageSources().playerAttack(user),100f);
                 ((PlayerExtensions)user).dotwarden$setSacrifice(true);
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(((PlayerExtensions)user).dotwarden$hasSacrificed());
