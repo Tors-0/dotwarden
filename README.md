@@ -9,4 +9,4 @@ A mod that aims to add items/gear to allow you to play a sculk-based spellcaster
 [RealRTTV/malum-quilt](https://github.com/RealRTTV/malum-quilt/blob/master/src/main/java/ca/rttv/malum/client/render/item/ScytheItemRenderer.java) - ItemRendererMixin, ScytheItemRenderer, some client init code
 ## Art
 [Raeeeee](https://github.com/Tors-0) - Developer Art<br>
-Bing.com - Echo Chamber, Harmonic Staff, Captured Soul
+Bing.com (a person, not the website) - Echo Chamber, Harmonic Staff, Captured Soul
