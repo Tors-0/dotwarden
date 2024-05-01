@@ -41,6 +41,7 @@ public class DOTWarden implements ModInitializer {
         ModItemGroup.init();
 
 
+
         // register predicate providers for custom item states
         ModelPredicateProviderRegistry.register(
                 ModItems.ECHO_CHAMBER,

@@ -12,7 +12,7 @@ import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    DISCIPLE("netherite", 35, (EnumMap)Util.make(new EnumMap(ArmorItem.ArmorSlot.class), (map) -> {
+    DISCIPLE("netherite", 35, Util.make(new EnumMap<ArmorItem.ArmorSlot, Integer>(ArmorItem.ArmorSlot.class), (map) -> {
         map.put(ArmorItem.ArmorSlot.BOOTS, 3);
         map.put(ArmorItem.ArmorSlot.LEGGINGS, 6);
         map.put(ArmorItem.ArmorSlot.CHESTPLATE, 8);
@@ -21,8 +21,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
         return Ingredient.ofItems(new ItemConvertible[]{Items.BLACK_WOOL});
     });
 
-    public static final StringIdentifiable.EnumCodec<ArmorMaterials> CODEC = StringIdentifiable.createCodec(ArmorMaterials::values);
-    private static final EnumMap<ArmorItem.ArmorSlot, Integer> BASE_DURABILITY_VALUES = (EnumMap)Util.make(new EnumMap(ArmorItem.ArmorSlot.class), (map) -> {
+    private static final EnumMap BASE_DURABILITY_VALUES = (EnumMap)Util.make(new EnumMap(ArmorItem.ArmorSlot.class), (map) -> {
         map.put(ArmorItem.ArmorSlot.BOOTS, 13);
         map.put(ArmorItem.ArmorSlot.LEGGINGS, 15);
         map.put(ArmorItem.ArmorSlot.CHESTPLATE, 16);

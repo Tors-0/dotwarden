@@ -1,5 +1,8 @@
 {
-  "type": "minecraft:smithing",
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "minecraft:sculk"
+  },
   "base": {
     "item": "minecraft:diamond_chestplate"
   },
