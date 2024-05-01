@@ -4,17 +4,13 @@ import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerMixin implements PlayerExtensions {
-    @Shadow
-    protected abstract void vanishCursedItems();
-
+public abstract class PlayerEntityMixin implements PlayerExtensions {
     @Unique
     private int dotwarden$powerLevel = 0;
     @Unique

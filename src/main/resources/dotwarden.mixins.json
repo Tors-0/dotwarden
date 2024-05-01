@@ -8,7 +8,7 @@
     "common.EntityMixin",
     "common.PlayerInventoryMixin",
     "common.PlayerManagerMixin",
-    "common.PlayerMixin"
+    "common.PlayerEntityMixin"
   ],
   "client": [
     "client.ItemRendererMixin"

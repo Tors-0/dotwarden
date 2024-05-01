@@ -12,7 +12,7 @@ import static io.github.Tors_0.dotwarden.common.registry.ModDamageTypes.HEARTSTA
 
 @Mixin(DamageTypes.class)
 public interface DamageTypesMixin {
-    @Inject(method = "bootstrap", at = @At(value = "HEAD"))
+    @Inject(method = "bootstrap", at = @At(value = "RETURN"))
     private static void dotwarden$addCustomDamageType(BootstrapContext<DamageType> context, CallbackInfo ci) {
         context.register(HEARTSTAB, new DamageType("heartstab", 0.1f));
     }

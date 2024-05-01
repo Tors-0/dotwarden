@@ -3,7 +3,6 @@ package io.github.Tors_0.dotwarden.common.item;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
 import io.github.Tors_0.dotwarden.common.networking.DOTWNetworking;
-import io.github.Tors_0.dotwarden.common.registry.ModDamageTypes;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,9 +10,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.warden.WardenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -87,14 +83,15 @@ public class SculkedKnifeItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (!world.isClient()) {
-            if (!((PlayerExtensions)user).dotwarden$hasSacrificed()) {
+            PlayerExtensions player = (PlayerExtensions) user;
+            if (!player.dotwarden$hasSacrificed()) {
                 ItemStack itm = new ItemStack(ModItems.CORRUPTED_HEART);
                 itm.getOrCreateSubNbt(DOTWarden.ID).putString("owner",user.getName().getString());
                 user.getInventory().insertStack(itm);
-                user.damage(world.getDamageSources().create(ModDamageTypes.HEARTSTAB, user),1000f);
-                ((PlayerExtensions)user).dotwarden$setSacrifice(true);
+                user.damage(world.getDamageSources().playerAttack(user),100f);
+                player.dotwarden$setSacrifice(true);
                 PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeBoolean(((PlayerExtensions)user).dotwarden$hasSacrificed());
+                buf.writeBoolean(player.dotwarden$hasSacrificed());
                 ServerPlayNetworking.send((ServerPlayerEntity) user, DOTWNetworking.SYNC_SACRIFICE_ID, buf);
             }
         }
