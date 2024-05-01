@@ -62,7 +62,8 @@ public class DOTWarden implements ModInitializer {
                 new Identifier("tooting"),
                 (stack, world, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == stack ? 1.0F : 0.0F
         );
-        // modify existing events
+
+        // keep power and sacrifice status on death/dimension transfer
         ServerPlayerEntityCopyCallback.EVENT.register((copy, original, wasDeath) -> {
             if (copy instanceof PlayerExtensions playerNew && original instanceof PlayerExtensions playerOld) {
                 playerNew.dotwarden$setPowerLevel(playerOld.dotwarden$getPowerLevel());
@@ -70,6 +71,7 @@ public class DOTWarden implements ModInitializer {
             }
         });
 
+        // let the warden drop a soul
         LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) -> {
             if (source.isBuiltin() && WARDEN_LOOT_TABLE_ID.equals(id)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
