@@ -4,25 +4,25 @@ import com.google.gson.JsonObject;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class HarmonicStaffRecipe implements Recipe<CraftingInventory> {
+public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     public static final Identifier HARMONIC_STAFF_RECIPE_ID = new Identifier(DOTWarden.ID, "harmonic_staff");
     private static final Ingredient ECHO_CHAMBER = Ingredient.ofItems(ModItems.ECHO_CHAMBER);
     private static final Ingredient ECHO_SHARD = Ingredient.ofItems(Items.ECHO_SHARD);
     private static final Ingredient AMETHYST_CLUSTER = Ingredient.ofItems(Items.AMETHYST_CLUSTER);
 
-    public HarmonicStaffRecipe() {}
+    public HarmonicStaffRecipe(Identifier id, CraftingCategory category) {
+        super(HARMONIC_STAFF_RECIPE_ID, CraftingCategory.EQUIPMENT);
+    }
 
     @Override
     public boolean isIgnoredInRecipeBook() {
@@ -35,7 +35,7 @@ public class HarmonicStaffRecipe implements Recipe<CraftingInventory> {
     }
 
     @Override
-    public boolean matches(CraftingInventory inventory, World world) {
+    public boolean matches(RecipeInputInventory inventory, World world) {
         for (int i = 6; i < 9; ++i) {
             ItemStack itemStack = inventory.getStack(i);
             if (!itemStack.isEmpty()) {
@@ -49,7 +49,7 @@ public class HarmonicStaffRecipe implements Recipe<CraftingInventory> {
     }
 
     @Override
-    public ItemStack craft(CraftingInventory inventory, DynamicRegistryManager registryManager) {
+    public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         for (int i = 3; i < 6; ++i) {
             ItemStack echoStack = inventory.getStack(i);
             if (
@@ -78,7 +78,7 @@ public class HarmonicStaffRecipe implements Recipe<CraftingInventory> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return HarmonicStaffRecipeSerializer.INSTANCE;
+        return DOTWarden.HARMONIC_STAFF_RECIPE_SERIALIZER;
     }
 
     public static class Type implements RecipeType<HarmonicStaffRecipe> {
@@ -90,27 +90,5 @@ public class HarmonicStaffRecipe implements Recipe<CraftingInventory> {
     @Override
     public RecipeType<?> getType() {
         return Type.INSTANCE;
-    }
-    public static class HarmonicStaffRecipeSerializer implements RecipeSerializer<HarmonicStaffRecipe> {
-        private HarmonicStaffRecipeSerializer() {}
-
-        public static final HarmonicStaffRecipeSerializer INSTANCE = new HarmonicStaffRecipeSerializer();
-
-        public static final Identifier ID = new Identifier(DOTWarden.ID, "harmonic_staff");
-
-        @Override
-        public HarmonicStaffRecipe read(Identifier id, JsonObject json) {
-            return new HarmonicStaffRecipe();
-        }
-
-        @Override
-        public HarmonicStaffRecipe read(Identifier id, PacketByteBuf buf) {
-            return new HarmonicStaffRecipe();
-        }
-
-        @Override
-        public void write(PacketByteBuf buf, HarmonicStaffRecipe recipe) {
-
-        }
     }
 }

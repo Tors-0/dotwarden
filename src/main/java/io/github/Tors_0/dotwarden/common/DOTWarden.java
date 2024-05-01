@@ -12,6 +12,8 @@ import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -27,21 +29,27 @@ public class DOTWarden implements ModInitializer {
     // It is considered best practice to use your mod name as the logger's name.
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger(ID);
+
+    public static final SpecialRecipeSerializer<HarmonicStaffRecipe> HARMONIC_STAFF_RECIPE_SERIALIZER =
+            RecipeSerializer.register(HarmonicStaffRecipe.HARMONIC_STAFF_RECIPE_ID.toString(),
+                    new SpecialRecipeSerializer<>(HarmonicStaffRecipe::new));
+
+    public static final SpecialRecipeSerializer<SeismicHornRecipe> SEISMIC_HORN_RECIPE_SERIALIZER =
+            RecipeSerializer.register(SeismicHornRecipe.SEISMIC_HORN_RECIPE_ID.toString(),
+                    new SpecialRecipeSerializer<>(SeismicHornRecipe::new));
+
     private static final Identifier WARDEN_LOOT_TABLE_ID = EntityType.WARDEN.getLootTableId();
 
     @Override
     public void onInitialize(ModContainer mod) {
         LOGGER.info("Now initializing {} version {}", mod.metadata().name(), mod.metadata().version());
 
-        ModDamageTypes.register();
-
         // register all items
         ModItems.register();
         ModItemGroup.init();
 
-//        Registry.register(Registries.RECIPE_SERIALIZER, HarmonicStaffRecipe.HarmonicStaffRecipeSerializer.ID, HarmonicStaffRecipe.HarmonicStaffRecipeSerializer.INSTANCE);
+        // register custom recipe types
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ID, HarmonicStaffRecipe.Type.ID), HarmonicStaffRecipe.Type.INSTANCE);
-//        Registry.register(Registries.RECIPE_SERIALIZER, SeismicHornRecipe.SeismicHornRecipeSerializer.ID, HarmonicStaffRecipe.HarmonicStaffRecipeSerializer.INSTANCE);
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ID, SeismicHornRecipe.Type.ID), SeismicHornRecipe.Type.INSTANCE);
 
         // register predicate providers for custom item states

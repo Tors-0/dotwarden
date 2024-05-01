@@ -3,6 +3,7 @@ package io.github.Tors_0.dotwarden.common.item;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
 import io.github.Tors_0.dotwarden.common.networking.DOTWNetworking;
+import io.github.Tors_0.dotwarden.common.registry.ModDamageTypes;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,6 +11,9 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.warden.WardenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -30,6 +34,7 @@ import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 import java.util.List;
 
 import static io.github.Tors_0.dotwarden.common.item.PowerItem.ptsUntilNextLevel;
+import static io.github.Tors_0.dotwarden.common.registry.ModDamageTypes.HEARTSTAB;
 
 public class SculkedKnifeItem extends Item {
     public SculkedKnifeItem(Settings settings) {
@@ -88,8 +93,8 @@ public class SculkedKnifeItem extends Item {
                 ItemStack itm = new ItemStack(ModItems.CORRUPTED_HEART);
                 itm.getOrCreateSubNbt(DOTWarden.ID).putString("owner",user.getName().getString());
                 user.getInventory().insertStack(itm);
-                user.damage(world.getDamageSources().playerAttack(user),100f);
-                player.dotwarden$setSacrifice(true);
+                user.damage(ModDamageTypes.of(world, HEARTSTAB),1000f);
+                ((PlayerExtensions)user).dotwarden$setSacrifice(true);
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(player.dotwarden$hasSacrificed());
                 ServerPlayNetworking.send((ServerPlayerEntity) user, DOTWNetworking.SYNC_SACRIFICE_ID, buf);
