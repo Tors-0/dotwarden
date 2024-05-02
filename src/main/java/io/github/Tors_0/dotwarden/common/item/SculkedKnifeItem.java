@@ -11,9 +11,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSources;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.warden.WardenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -37,6 +34,8 @@ import static io.github.Tors_0.dotwarden.common.item.PowerItem.ptsUntilNextLevel
 import static io.github.Tors_0.dotwarden.common.registry.ModDamageTypes.HEARTSTAB;
 
 public class SculkedKnifeItem extends Item {
+
+
     public SculkedKnifeItem(Settings settings) {
         super(settings);
     }
@@ -47,18 +46,15 @@ public class SculkedKnifeItem extends Item {
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker instanceof PlayerEntity player) {
+            float dmgAmt = Math.min(((PlayerExtensions) player).dotwarden$getPowerLevel() / 5f + 1, 15f);
+            boolean targetWillDie = dmgAmt >= target.getHealth();
             if (((PlayerExtensions) player).dotwarden$getPowerLevel() > 0) {
-                target.damage(attacker.getWorld().getDamageSources().playerAttack(player),Math.min(((PlayerExtensions) player).dotwarden$getPowerLevel() / 5f + 1, 15f));
+                target.damage(attacker.getWorld().getDamageSources().playerAttack(player), dmgAmt);
             } else {
-                stack.damage(1, attacker, (e) -> {
-                    e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND);
-                });
+                stack.damage(1, attacker, (e) -> e.sendEquipmentBreakStatus(EquipmentSlot.MAINHAND));
                 target.damage(attacker.getWorld().getDamageSources().playerAttack(player),0f);
             }
-            if (target.isDead()
-                    && player.getInventory().contains(new ItemStack(ModItems.POWER_OF_THE_DISCIPLE))
-                    && !target.isBaby()
-                    && !(target instanceof WardenEntity)
+            if (targetWillDie && !target.isBaby() && !(target instanceof WardenEntity)
             ) {
                 PlayerExtensions playerE = (PlayerExtensions) player;
                 if (target instanceof PlayerEntity) {

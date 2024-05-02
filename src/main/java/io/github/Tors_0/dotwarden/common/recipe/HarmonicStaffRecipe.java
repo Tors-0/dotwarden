@@ -3,7 +3,6 @@ package io.github.Tors_0.dotwarden.common.recipe;
 import com.google.gson.JsonObject;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -13,6 +12,7 @@ import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.quiltmc.qsl.recipe.api.serializer.QuiltRecipeSerializer;
 
 public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     public static final Identifier HARMONIC_STAFF_RECIPE_ID = new Identifier(DOTWarden.ID, "harmonic_staff");
@@ -90,5 +90,30 @@ public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     @Override
     public RecipeType<?> getType() {
         return Type.INSTANCE;
+    }
+    public static class Serializer implements QuiltRecipeSerializer<HarmonicStaffRecipe> {
+        private Serializer() {}
+
+        public static final Serializer INSTANCE = new Serializer();
+
+        @Override
+        public JsonObject toJson(HarmonicStaffRecipe recipe) {
+            return null;
+        }
+
+        @Override
+        public HarmonicStaffRecipe read(Identifier id, JsonObject json) {
+            return new HarmonicStaffRecipe(id, CraftingCategory.EQUIPMENT);
+        }
+
+        @Override
+        public HarmonicStaffRecipe read(Identifier id, PacketByteBuf buf) {
+            return new HarmonicStaffRecipe(id, CraftingCategory.EQUIPMENT);
+        }
+
+        @Override
+        public void write(PacketByteBuf buf, HarmonicStaffRecipe recipe) {
+
+        }
     }
 }

@@ -1,14 +1,11 @@
 package io.github.Tors_0.dotwarden.common.recipe;
 
-import com.google.gson.JsonObject;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;

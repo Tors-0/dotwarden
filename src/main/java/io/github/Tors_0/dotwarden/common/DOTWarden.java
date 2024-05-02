@@ -1,14 +1,11 @@
 package io.github.Tors_0.dotwarden.common;
 
 import io.github.Tors_0.dotwarden.common.extensions.PlayerExtensions;
-import io.github.Tors_0.dotwarden.common.item.EchoChamberItem;
 import io.github.Tors_0.dotwarden.common.recipe.HarmonicStaffRecipe;
 import io.github.Tors_0.dotwarden.common.recipe.SeismicHornRecipe;
-import io.github.Tors_0.dotwarden.common.registry.ModDamageTypes;
 import io.github.Tors_0.dotwarden.common.registry.ModItemGroup;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
@@ -20,6 +17,7 @@ import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.entity.event.api.ServerPlayerEntityCopyCallback;
+import org.quiltmc.qsl.recipe.api.serializer.QuiltRecipeSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +28,9 @@ public class DOTWarden implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 
-    public static final SpecialRecipeSerializer<HarmonicStaffRecipe> HARMONIC_STAFF_RECIPE_SERIALIZER =
+    public static final QuiltRecipeSerializer<HarmonicStaffRecipe> HARMONIC_STAFF_RECIPE_SERIALIZER =
             RecipeSerializer.register(HarmonicStaffRecipe.HARMONIC_STAFF_RECIPE_ID.toString(),
-                    new SpecialRecipeSerializer<>(HarmonicStaffRecipe::new));
+                    HarmonicStaffRecipe.Serializer.INSTANCE);
 
     public static final SpecialRecipeSerializer<SeismicHornRecipe> SEISMIC_HORN_RECIPE_SERIALIZER =
             RecipeSerializer.register(SeismicHornRecipe.SEISMIC_HORN_RECIPE_ID.toString(),
@@ -51,17 +49,6 @@ public class DOTWarden implements ModInitializer {
         // register custom recipe types
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ID, HarmonicStaffRecipe.Type.ID), HarmonicStaffRecipe.Type.INSTANCE);
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ID, SeismicHornRecipe.Type.ID), SeismicHornRecipe.Type.INSTANCE);
-
-        // register predicate providers for custom item states
-        ModelPredicateProviderRegistry.register(
-                ModItems.ECHO_CHAMBER,
-                new Identifier("filled"),
-                (stack, world, entity, seed) -> EchoChamberItem.getAmountFilled(stack));
-        ModelPredicateProviderRegistry.register(
-                ModItems.SEISMIC_HORN,
-                new Identifier("tooting"),
-                (stack, world, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == stack ? 1.0F : 0.0F
-        );
 
         // keep power and sacrifice status on death/dimension transfer
         ServerPlayerEntityCopyCallback.EVENT.register((copy, original, wasDeath) -> {

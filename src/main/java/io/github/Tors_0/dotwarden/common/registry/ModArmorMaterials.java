@@ -1,18 +1,20 @@
 package io.github.Tors_0.dotwarden.common.registry;
 
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Lazy;
-import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.Util;
 
 import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    DISCIPLE("netherite", 35, Util.make(new EnumMap<ArmorItem.ArmorSlot, Integer>(ArmorItem.ArmorSlot.class), (map) -> {
+    DISCIPLE("woollite", 35, Util.make(new EnumMap<ArmorItem.ArmorSlot, Integer>(ArmorItem.ArmorSlot.class), (map) -> {
         map.put(ArmorItem.ArmorSlot.BOOTS, 3);
         map.put(ArmorItem.ArmorSlot.LEGGINGS, 6);
         map.put(ArmorItem.ArmorSlot.CHESTPLATE, 8);

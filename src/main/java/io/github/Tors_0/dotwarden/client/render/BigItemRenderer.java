@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,18 +15,17 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.profiler.Profiler;
 import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public class ScytheItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloader {
+public class BigItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloader {
     private final Identifier id;
     private final Identifier scytheId;
     private ItemRenderer itemRenderer;
     private BakedModel inventoryScytheModel;
     private BakedModel worldScytheModel;
 
-    public ScytheItemRenderer(Identifier scytheId) {
+    public BigItemRenderer(Identifier scytheId) {
         this.id = new Identifier(scytheId.getNamespace(), scytheId.getPath() + "_renderer");
         this.scytheId = scytheId;
     }
