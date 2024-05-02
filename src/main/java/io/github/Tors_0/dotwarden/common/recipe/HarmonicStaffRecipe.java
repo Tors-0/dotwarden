@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import org.quiltmc.qsl.recipe.api.serializer.QuiltRecipeSerializer;
 
 public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
+    // TODO: make le recipes use a sculk core instead of custom recipe types
     public static final Identifier HARMONIC_STAFF_RECIPE_ID = new Identifier(DOTWarden.ID, "harmonic_staff");
     private static final Ingredient ECHO_CHAMBER = Ingredient.ofItems(ModItems.ECHO_CHAMBER);
     private static final Ingredient ECHO_SHARD = Ingredient.ofItems(Items.ECHO_SHARD);
