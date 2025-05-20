@@ -1,38 +1,28 @@
 package io.github.Tors_0.dotwarden.common.recipe;
 
-import com.google.gson.JsonObject;
 import io.github.Tors_0.dotwarden.common.DOTWarden;
+import io.github.Tors_0.dotwarden.common.item.EchoChamberItem;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
+import io.github.Tors_0.dotwarden.common.registry.ModRecipeSerializers;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import org.quiltmc.qsl.recipe.api.serializer.QuiltRecipeSerializer;
 
 public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     // TODO: make le recipes use a sculk core instead of custom recipe types
+    // TODO opt 2: fix custom recipes
     public static final Identifier HARMONIC_STAFF_RECIPE_ID = new Identifier(DOTWarden.ID, "harmonic_staff");
     private static final Ingredient ECHO_CHAMBER = Ingredient.ofItems(ModItems.ECHO_CHAMBER);
     private static final Ingredient ECHO_SHARD = Ingredient.ofItems(Items.ECHO_SHARD);
     private static final Ingredient AMETHYST_CLUSTER = Ingredient.ofItems(Items.AMETHYST_CLUSTER);
 
     public HarmonicStaffRecipe(Identifier id, CraftingCategory category) {
-        super(HARMONIC_STAFF_RECIPE_ID, CraftingCategory.EQUIPMENT);
-    }
-
-    @Override
-    public boolean isIgnoredInRecipeBook() {
-        return false;
-    }
-
-    @Override
-    public Identifier getId() {
-        return HARMONIC_STAFF_RECIPE_ID;
+        super(id, category);
     }
 
     @Override
@@ -52,12 +42,9 @@ public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     @Override
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         for (int i = 3; i < 6; ++i) {
-            ItemStack echoStack = inventory.getStack(i);
-            if (
-                    !echoStack.isEmpty()
-                    && echoStack.getNbt() != null
-                    && echoStack.getOrCreateNbt().contains("Items")
-                    && ItemStack.fromNbt(echoStack.getOrCreateNbt().getList("Items", NbtElement.COMPOUND_TYPE).getCompound(0)).getCount() == 1
+            ItemStack echoChamber = inventory.getStack(i);
+            if (!echoChamber.isEmpty()
+                    && EchoChamberItem.getBundleOccupancy(echoChamber) == 16
             ) {
                 if (inventory.getStack(i-3).isOf(Items.AMETHYST_CLUSTER) && inventory.getStack(i+3).isOf(Items.ECHO_SHARD)) {
                     return new ItemStack(ModItems.HARMONIC_STAFF);
@@ -74,12 +61,12 @@ public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
 
     @Override
     public boolean fits(int width, int height) {
-        return width * height >= 2;
+        return width >= 1 && height >= 3;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return DOTWarden.HARMONIC_STAFF_RECIPE_SERIALIZER;
+        return ModRecipeSerializers.HARMONIC_STAFF;
     }
 
     public static class Type implements RecipeType<HarmonicStaffRecipe> {
@@ -91,30 +78,5 @@ public class HarmonicStaffRecipe extends SpecialCraftingRecipe {
     @Override
     public RecipeType<?> getType() {
         return Type.INSTANCE;
-    }
-    public static class Serializer implements QuiltRecipeSerializer<HarmonicStaffRecipe> {
-        private Serializer() {}
-
-        public static final Serializer INSTANCE = new Serializer();
-
-        @Override
-        public JsonObject toJson(HarmonicStaffRecipe recipe) {
-            return null;
-        }
-
-        @Override
-        public HarmonicStaffRecipe read(Identifier id, JsonObject json) {
-            return new HarmonicStaffRecipe(id, CraftingCategory.EQUIPMENT);
-        }
-
-        @Override
-        public HarmonicStaffRecipe read(Identifier id, PacketByteBuf buf) {
-            return new HarmonicStaffRecipe(id, CraftingCategory.EQUIPMENT);
-        }
-
-        @Override
-        public void write(PacketByteBuf buf, HarmonicStaffRecipe recipe) {
-
-        }
     }
 }

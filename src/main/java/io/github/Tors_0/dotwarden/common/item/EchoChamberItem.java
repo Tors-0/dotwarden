@@ -191,7 +191,7 @@ public class EchoChamberItem extends BundleItem {
     public int getItemBarStep(ItemStack stack) {
         return Math.min(1 + 12 * getBundleOccupancy(stack) / MAX_STORAGE, 13);
     }
-    private static int getBundleOccupancy(ItemStack stack) {
+    public static int getBundleOccupancy(ItemStack stack) {
         return getBundledStacks(stack).mapToInt(itemStack -> getItemOccupancy(itemStack) * itemStack.getCount()).sum();
     }
     private static Stream<ItemStack> getBundledStacks(ItemStack stack) {

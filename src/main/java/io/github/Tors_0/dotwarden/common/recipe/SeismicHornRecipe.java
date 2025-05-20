@@ -1,7 +1,9 @@
 package io.github.Tors_0.dotwarden.common.recipe;
 
 import io.github.Tors_0.dotwarden.common.DOTWarden;
+import io.github.Tors_0.dotwarden.common.item.EchoChamberItem;
 import io.github.Tors_0.dotwarden.common.registry.ModItems;
+import io.github.Tors_0.dotwarden.common.registry.ModRecipeSerializers;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,17 +20,12 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     private static final Ingredient SCULK_SHRIEKER = Ingredient.ofItems(Items.SCULK_SHRIEKER);
 
     public SeismicHornRecipe(Identifier id, CraftingCategory category) {
-        super(SEISMIC_HORN_RECIPE_ID, CraftingCategory.EQUIPMENT);
+        super(id, category);
     }
 
     @Override
     public boolean isIgnoredInRecipeBook() {
         return false;
-    }
-
-    @Override
-    public Identifier getId() {
-        return SEISMIC_HORN_RECIPE_ID;
     }
 
     @Override
@@ -48,12 +45,9 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
     @Override
     public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
         for (int i = 0; i < 3; ++i) {
-            ItemStack echoStack = inventory.getStack(i);
-            if (
-                    !echoStack.isEmpty()
-                    && echoStack.getNbt() != null
-                    && echoStack.getOrCreateNbt().contains("Items")
-                    && ItemStack.fromNbt(echoStack.getOrCreateNbt().getList("Items", NbtElement.COMPOUND_TYPE).getCompound(0)).getCount() == 2
+            ItemStack echoChamber = inventory.getStack(i);
+            if (!echoChamber.isEmpty()
+                    && EchoChamberItem.getBundleOccupancy(echoChamber) == 32
             ) {
                 if (inventory.getStack(i+3).isOf(Items.GOAT_HORN) && inventory.getStack(i+6).isOf(Items.SCULK_SHRIEKER)) {
                     return new ItemStack(ModItems.SEISMIC_HORN);
@@ -75,7 +69,7 @@ public class SeismicHornRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return DOTWarden.SEISMIC_HORN_RECIPE_SERIALIZER;
+        return ModRecipeSerializers.SEISMIC_HORN;
     }
 
 
